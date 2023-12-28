@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $borrowDate = isset($_POST["borrowDate"]) ? mysqli_real_escape_string($conn, $_POST["borrowDate"]) : '';
     $dueDate = isset($_POST["dueDate"]) ? mysqli_real_escape_string($conn, $_POST["dueDate"]) : '';
     $uid = $_SESSION["user_id"];
-    $bid = isset($_POST["id"]) ? mysqli_real_escape_string($conn, $_POST["id"]) : '';
+    $bid = isset($_POST["bid"]) ? mysqli_real_escape_string($conn, $_POST["bid"]) : '';
 
     $result=rentBook($borrowDate, $dueDate, $uid, $bid);
             if ($result) {
@@ -40,12 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result=selectAllBooks();
         if(mysqli_num_rows($result)>0){
             while($row= mysqli_fetch_assoc($result)){
-                echo"{$_SESSION["user_id"]}";
                 echo"<table>";
                 echo"
                     <tr><form method='post' action='" .$_SERVER["PHP_SELF"]. "'>
                     <td rowspan= 7><img src='{$row['img']}' width='100' height='130'></td></tr>
-                    <tr><td><input type='hidden' name='id' value='" . $row['id'] . "'></td></tr>
+                    <tr><td>Book ID: {$row['id']}</td></tr>
                     <tr><td>{$row['title']}</td></tr>
                     <tr><td>{$row['author']}</td></tr>
                     <tr><td>{$row['publicationDate']}</td></tr>
@@ -53,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <tr><td>{$row['name']}</td></tr>
                     <tr><td>
                     
-                    <a data-bs-toggle='modal' data-bs-target='#rentBook' name='rent_book' class='nav-link' onclick='submitForm({$row['id']})'>Rent Book</a>
+                    <a data-bs-toggle='modal' data-bs-target='#rentBook' name='rent_book' class='nav-link' >Rent Book</a>
                     
 
                     </td></tr>
@@ -70,13 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="modal-content">
                 <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
 
-                <?php
-                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                      if (isset($_POST["rent_book"])) {
-                        $bookid=$_POST["id"];
-                     }
-                    }
-                ?>
                 <div class="modal-header">
                     <div class="modal-title">
                         Sign Up
@@ -85,7 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="modal-body">
                     <!-- hon l shu esmon-->
-                    
+                    <div class="input-group mt-2">
+                        Book ID:
+                        <input id="bid" type="text" class="form-control" name="bid" placeholder="Book ID">
+                    </div>
                     <div class="input-group mt-2">
                         Borrow Date:
                         <input id="borrowDate" type="date" class="form-control" name="borrowDate" placeholder="Borrow Date">
@@ -110,13 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                 
-<script>  function submitForm(bookId) {
-        // Set the value of the hidden input in the form
-        document.getElementById('rentBookForm').elements['id'].value = bookId;
 
-        // Show the modal
-        $('#rentBook').modal('show');
-    }</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
