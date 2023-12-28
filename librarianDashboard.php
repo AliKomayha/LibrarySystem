@@ -73,8 +73,32 @@ $conn=connectToDB();
     <input type="submit" name="submit" value="Add Book">
 
 </form>
+</br></br>
 
-<!-- here we will display all books in a certain way, okkay hobb -->
-    
+<!-- here we will display all books in a certain way, okkay hobb
+<tr><td rowspan= 6><img src='{$row['img']}' width='100' height='130'></td></tr>
+ -->
+<?php  
+$result=selectAllBooks();
+echo"<table border=1>"; 
+        if(mysqli_num_rows($result)>0){
+            
+            while($row= mysqli_fetch_assoc($result)){
+                
+                echo"
+                    <tr><td>{$row['title']}</td>
+                    <td>{$row['author']}</td>
+                    <td>{$row['publicationDate']}</td>
+                    <td>{$row['status']}</td>
+                    <td>{$row['name']}</td>
+                    <td><button>Rent Book</button</td></tr>
+                ";
+                
+                
+            }
+            echo"</table>";
+        }
+?>
+
 </body>
 </html>

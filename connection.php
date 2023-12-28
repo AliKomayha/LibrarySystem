@@ -14,7 +14,7 @@
 
     function logIn($username){
         $conn= connectToDB();
-        $sql="SELECT username, password, rid FROM Account, Users, Userroles 
+        $sql="SELECT Users.id, username, password, rid FROM Account, Users, Userroles 
                 WHERE account.uid = Users.id
                 AND Users.id= Userroles.uid 
                 AND Account.username = '$username';";
@@ -44,7 +44,7 @@
 
     function selectAllBooks(){
         $conn=connectToDB();
-        $sql="SELECT title, author, publicationDate,img, bookstatus.status,category.name 
+        $sql="SELECT book.id, title, author, publicationDate,img, bookstatus.status,category.name 
         FROM book,bookstatus,category
         WHERE book.cid=category.id
         AND book.status=bookstatus.id;";
@@ -62,5 +62,14 @@
         closeDBconnection($conn);
         return $result;
 
+    }
+
+    function rentBook($borrowDate, $dueDate, $uid, $bid){
+        $conn=connectToDB();
+        $sql="INSERT INTO `borroweditems` (`borrowDate`, `dueDate`, `uid`, `bid`) VALUES
+        ('$borrowDate', '$dueDate', '$uid', '$bid'); ";
+        $result=mysqli_query($conn,$sql);
+        // closeDBconnection($conn);
+        return $result;
     }
 ?>
