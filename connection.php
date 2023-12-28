@@ -12,7 +12,17 @@
         mysqli_close($conn);
     }
 
+    function logIn($username){
+        $conn= connectToDB();
+        $sql="SELECT username, password, rid FROM Account, Users, Userroles 
+                WHERE account.uid = Users.id
+                AND Users.id= Userroles.uid 
+                AND Account.username = '$username';";
+        $result=mysqli_query($conn,$sql);
+        closeDBconnection($conn);
+        return $result;
 
+    }
     function signUP($email, $fname, $lname, $phone, $username, $password, $rid){
             $conn= connectToDB();
             $sql=" INSERT INTO `users` (`fname`, `lname`, `email`, `phone`) VALUES
@@ -32,5 +42,25 @@
         exit();
     }
 
+    function selectAllBooks(){
+        $conn=connectToDB();
+        $sql="SELECT title, author, publicationDate,img, bookstatus.status,category.name 
+        FROM book,bookstatus,category
+        WHERE book.cid=category.id
+        AND book.status=bookstatus.id;";
 
+        $result=mysqli_query($conn,$sql);
+        closeDBconnection($conn);
+        return $result;
+    
+    }
+    function addBook($title,$author,$publicationDate,$targetPath,$status,$cid){
+        $conn=connectToDB();
+        $sql=" INSERT INTO `book` (`title`, `author`, `publicationDate`, `img`, `status`,`cid`) VALUES
+        ( '$title', '$author', '$publicationDate', '$targetPath', 1, 1); ";
+        $result=mysqli_query($conn,$sql);
+        closeDBconnection($conn);
+        return $result;
+
+    }
 ?>

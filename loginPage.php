@@ -3,7 +3,37 @@ include ("connection.php");
 
 $conn=connectToDB();
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $password = md5($password);
+    
 
+    // Retrieve user from the users table
+    $result = logIn($username);
+
+    if ($result && mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+
+        if ($password == $row["password"]) {
+            // Start session and set user role
+            session_start();
+            $_SESSION["user_id"] = $row["id"];
+            $_SESSION["user_role"] = $row["rid"];
+
+            // Redirect based on role
+            if ($row["rid"] == 1) {
+                header("Location: librarianDashboard.php");
+            } else if($row["rid"] == 2) {
+                header("Location: studentDashboard.php");
+            }
+        } else {
+            echo "Login failed! Incorrect password.";
+        }
+    } else {
+        echo "Login failed! User not found.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +41,7 @@ $conn=connectToDB();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
     <title>Log in</title>
 </head>
 <body>
