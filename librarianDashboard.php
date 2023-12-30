@@ -63,10 +63,6 @@ $conn=connectToDB();
     <input id="title" type="text" class="form-control" name="title" placeholder="Book Title">
     <input id="author" type="text" class="form-control" name="author" placeholder="Author Name">
     <input id="publicationDate" type="Date" class="form-control" name="publicationDate" placeholder="Publication Date">
-    <!-- <select name="" required>
-        <option value="teacher">Teacher</option>
-        <option value="student">Student</option>
-    </select><br> -->
     <label for="file">Select File:</label>
     <input type="file" name="file" id="file" accept=".jpg, .jpeg, .png" required>
 

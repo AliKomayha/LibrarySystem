@@ -67,9 +67,36 @@
     function rentBook($borrowDate, $dueDate, $uid, $bid){
         $conn=connectToDB();
         $sql="INSERT INTO `borroweditems` (`borrowDate`, `dueDate`, `uid`, `bid`) VALUES
-        ('$borrowDate', '$dueDate', '$uid', '$bid'); ";
-        $result=mysqli_query($conn,$sql);
-        // closeDBconnection($conn);
+        ('$borrowDate', '$dueDate', '$uid', '$bid'); 
+        UPDATE book SET book.status = 2 WHERE book.id ='$bid;'";
+        $result=mysqli_multi_query($conn,$sql);
+        closeDBconnection($conn);
         return $result;
     }
+
+    function showRented($uid){
+        $conn=connectToDB();
+        $sql=" SELECT borroweditems.id, bid, title, author, img, borrowDate, dueDate, returnDate
+        FROM book,borroweditems,users
+        WHERE users.id= borroweditems.uid
+        AND book.id= borroweditems.bid
+        AND users.id ='$uid';";
+
+        $result=mysqli_query($conn,$sql);
+        closeDBconnection($conn);
+        return $result;
+
+
+    }
+    function returnBook($returnDate, $brid, $bid){
+        $conn=connectToDB();
+        $sql="UPDATE borroweditems SET returnDate= '$returnDate' WHERE borroweditems.id=$brid;
+                UPDATE book SET book.status = 1 WHERE book.id =$bid;";
+            
+        $result=mysqli_multi_query($conn,$sql);
+        closeDBconnection($conn);
+        return $result;
+
+    }
+   
 ?>

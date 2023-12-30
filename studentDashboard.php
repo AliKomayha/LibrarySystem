@@ -34,7 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body style="margin: 0; padding: 0;">
     
-    <div style="width: 100%; height: 50px; background-color: black ;"></div>
+    <div style="width: 100%; height: 50px; background-color: black ;">
+        <a href="rentedBooks.php" >My Rented Books</a>
+    </div>
 
     <?php
         $result=selectAllBooks();
