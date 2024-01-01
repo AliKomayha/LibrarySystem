@@ -1,6 +1,11 @@
 <?php
 include("connection.php");
+session_start();
 
+if (!isset($_SESSION["user_id"]) || $_SESSION["user_role"] !== "1") {
+    header("Location: index.php");
+    exit();
+}
 
 $conn=connectToDB();
 
@@ -8,6 +13,22 @@ $conn=connectToDB();
  {
      return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
  }
+ function isLoggedIn()
+{
+    return isset($_SESSION["user_id"]);
+}
+function logout()
+{
+    session_start();
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
+// if (!isLoggedIn()) {
+//     // If not logged in, redirect to login page
+//     header("Location: loginPage.php");
+//     exit;
+// }
 
  $targetDir = "img/";
 
@@ -47,7 +68,9 @@ $conn=connectToDB();
         }
     }
  }
-
+ if (isset($_GET['logout'])) {
+    logout();
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,11 +81,11 @@ $conn=connectToDB();
     <title>Librarian</title>
 </head>
 <body>
-
+<h2>Librarian Dashboard</h2>
 <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data">
-    <input id="title" type="text" class="form-control" name="title" placeholder="Book Title">
-    <input id="author" type="text" class="form-control" name="author" placeholder="Author Name">
-    <input id="publicationDate" type="Date" class="form-control" name="publicationDate" placeholder="Publication Date">
+    <input id="title" type="text" class="form-control" name="title" placeholder="Book Title" required>
+    <input id="author" type="text" class="form-control" name="author" placeholder="Author Name" required>
+    <input id="publicationDate" type="Date" class="form-control" name="publicationDate" placeholder="Publication Date" required>
     <label for="file">Select File:</label>
     <input type="file" name="file" id="file" accept=".jpg, .jpeg, .png" required>
 
@@ -95,6 +118,7 @@ echo"<table border=1>";
             echo"</table>";
         }
 ?>
-
+<br><br>
+<a href="?logout=true">Logout</a>
 </body>
 </html>

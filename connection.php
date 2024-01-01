@@ -80,7 +80,8 @@
         FROM book,borroweditems,users
         WHERE users.id= borroweditems.uid
         AND book.id= borroweditems.bid
-        AND users.id ='$uid';";
+        AND users.id ='$uid'
+        ORDER BY id DESC;";
 
         $result=mysqli_query($conn,$sql);
         closeDBconnection($conn);

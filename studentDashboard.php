@@ -2,7 +2,25 @@
 include ("connection.php");
 session_start();
 
+if (!isset($_SESSION["user_id"]) || $_SESSION["user_role"] !== "2") {
+    header("Location: index.php");
+    exit();
+}
+
 $conn=connectToDB();
+
+function isLoggedIn()
+{
+    return isset($_SESSION["user_id"]);
+}
+
+function logout()
+{
+    session_start();
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -21,7 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 
-
+if (isset($_GET['logout'])) {
+    logout();
+}
 ?>
 
 <!DOCTYPE html>
@@ -31,13 +51,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css">
     <title>Student Dash</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around; 
+        }
+
+        .book-table {
+            margin: 10px; 
+            width: 30%; 
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+        }
+        .nav{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+
 </head>
 <body style="margin: 0; padding: 0;">
     
-    <div style="width: 100%; height: 50px; background-color: black ;">
-        <a href="rentedBooks.php" >My Rented Books</a>
+    <div class="nav", style="width: 100%; height: 50px; background-color: black ;" >
+        
+        <div><a href="rentedBooks.php" >My Rented Books</a></div>
+        <div><a href="?logout=true">Logout</a></div>
     </div>
 
+    <div class="flex-container">
     <?php
         $result=selectAllBooks();
         if(mysqli_num_rows($result)>0){
@@ -66,6 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     ?>
+    </div>
     <div class="modal" id="rentBook">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -87,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Borrow Date:
                         <input id="borrowDate" type="date" class="form-control" name="borrowDate" placeholder="Borrow Date">
                     </div>
-                    <?php echo"$bid"; ?>
+                    
                     <div class="input-group mt-2">
                         Due Date:
                         <input id="dueDate" type="date" class="form-control" name="dueDate" placeholder="Due Date">
@@ -107,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                 
-
+    
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

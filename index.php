@@ -45,12 +45,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Log in</title>
 </head>
 <body>
+<header class="navbar navbar-default bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">Library</a>
+            </div>
+        </div>
+
+
+    </header> 
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6">
+                <h1>Welcome to our Library</h1>
+                <img src="img/library.jpg" class="img-fluid mt-4" alt="Sample image" >
+            </div>
+
+        <div class="col-md-6">
     
             <div class="container">
+            <h3 class="title mt-5">Library</h3>
                 <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
                 <div class="input-group mt-4">
                     <input id="username" type="text" class="form-control" name="username" placeholder="Username">
@@ -63,9 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>    
                 </form>
             </div>
-        </div>
+            <div class="col">
+                <h4 class=" mt-5">Don't have an account?</h4>
+                <a href="signupPage.php">Sign Up</a>
+            </div>
+        </div>    
     </div>
 </div>
+
     
 </body>
 </html>   
